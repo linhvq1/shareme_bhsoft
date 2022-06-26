@@ -11,7 +11,7 @@ export default {
     type: 'document',
     fields: [
         {
-            name: 'userNamne',
+            name: 'userName',
             title: 'UserName',
             type: 'string'
         },
