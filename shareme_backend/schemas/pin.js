@@ -14,8 +14,8 @@ export default {
             type: 'string',
         },
         {
-            name: 'description',
-            title: 'Description',
+            name: 'destination',
+            title: 'Destination',
             type: 'url',
         },
         {
