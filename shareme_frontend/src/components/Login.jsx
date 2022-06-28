@@ -29,10 +29,10 @@ function Login() {
 
     localStorage.setItem('user', JSON.stringify(userObject))
 
-    const {name, picture, jti} = userObject
+    const {name, picture, sub} = userObject
 
     const doc = {
-      _id: jti,
+      _id: sub,
       _type: 'user',
       userName: name,
       image: picture
