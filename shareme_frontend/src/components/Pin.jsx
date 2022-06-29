@@ -21,7 +21,7 @@ function Pin({pin:{postedBy, image, _id, destination, save}}) {
     
     //nguoc lai muon lay ra 4 trong [1,2,3] ->[].length ->va mag tra ve k co so nap tuc la do dai tra ve la 0
     // -> !0 -> true -> !true -> false tuc la chua luu cai nao
-
+    
     // muc dich cua cai nay la de luu lai state
     const savePin = (id) => {
 
@@ -103,7 +103,7 @@ function Pin({pin:{postedBy, image, _id, destination, save}}) {
                                 className='bg-white flex items-center gap-2 text-black font-bold p-2 pl-4 pr-4 rounded-full opacity-70 hover:opacity-100 hover:shadow-md'
                             >
                                 <BsFillArrowUpRightCircleFill />
-                                {destination.length > 20? destination.slice(8,20):destination.slice(8)}
+                                {destination.length > 15? `${destination.slice(0,15)}...`:destination.slice(8)}
                             </a>
                         )}
                         {postedBy?._id === user.sub && (
