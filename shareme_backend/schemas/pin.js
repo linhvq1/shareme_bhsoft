@@ -59,5 +59,11 @@ export default {
       type: "number",
       initialValue: 0,
     },
+    {
+      name: "downloads",
+      title: "Downloads",
+      type: "number",
+      initialValue: 0,
+    },
   ],
 };

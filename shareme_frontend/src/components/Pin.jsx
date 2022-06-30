@@ -96,7 +96,14 @@ function Pin({
                   download
                   //Phương thức stopPropagation() của đối tượng event được sử dụng để ngăn không cho sự kiện lan toả lên các phần tử mẹ của phần tử mà ở đó diễn ra sự kiện.
                   // binh thuong k co cai method nay thi khi nhan no se bay sag ben pindetail
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e) => {
+                    client
+                      .patch(_id)
+                      .setIfMissing({ downloads: 0 })
+                      .inc({ downloads: 1 })
+                      .commit();
+                    e.stopPropagation();
+                  }}
                   className="bg-white w-9 h-9 flex justify-center items-center rounded-full text-dark text-xl opacity-75 hover:opacity-100 hover:shadow-md outline-none"
                 >
                   <MdDownloadForOffline />
