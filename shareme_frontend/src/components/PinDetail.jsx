@@ -7,6 +7,7 @@ import {client, urlFor} from '../client'
 import MasonryLayout from './MasonryLayout'
 import {pinDetailMorePinQuery, pinDetailQuery} from '../utils/data'
 import Spinner from './Spinner'
+import { fetchUser } from '../utils/fetchUser'
 
 function PinDetail({user}) {
   const [pins, setPins] = useState(null)
@@ -115,10 +116,10 @@ function PinDetail({user}) {
         </div>
         <div className="flex flex-wrap mt-6 gap-3">
           <Link 
-              to={`/user-profile/${pinDetails.postedBy?._id}`}
+              to={`/user-profile/${fetchUser()?.sub}`}
           >
               <img className='w-10 h-10 rounded-full cursor-pointer'
-                  src={pinDetails.postedBy?.image}
+                  src={fetchUser()?.picture}
                   alt="user-profile"
               />
           </Link>

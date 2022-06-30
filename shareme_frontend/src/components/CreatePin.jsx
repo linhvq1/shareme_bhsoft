@@ -79,7 +79,7 @@ function CreatePin({user}) {
         <div className='bg-secondaryColor p-3 flex flex-0.7 w-full '>
           <div className='flex justify-center items-center flex-col border-2 border-1 border-dotted border-gray-300 p-3 w-full h-420'>
             {loading && <Spinner />}
-            {wrongImageType && <p>Wrong image type</p>}
+            {wrongImageType && <p>It&apos;s wrong file type.</p>}
             {!imageAsset ?(
               <label>
                 <div className='flex flex-col items-center justify-center h-full'>

@@ -9,8 +9,6 @@ function Search({searchTerm}) {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    
-    
       setLoading(true)
       let query = searchTerm? searchQuery(searchTerm.toLowerCase()) : feedQuery
     
@@ -19,11 +17,8 @@ function Search({searchTerm}) {
         setPins(data)
         setLoading(false)
       })
-    
-    
   }, [searchTerm])
   
-
   return (
     <div>
       {loading && <Spinner message="Searching for pins..."/>}

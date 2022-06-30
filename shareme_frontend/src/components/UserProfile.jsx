@@ -64,7 +64,7 @@ function UserProfile() {
             />
             <h1 className="font-bold text-3xl text-center mt-3">{user.userName}</h1>
             <div className='absolute top-0 z-1 right-0 p-2'>
-              {userId === fetchUser().sub && (
+              {userId === fetchUser()?.sub && (
                 <button
                 type="button"
                 className=" bg-white p-2 rounded-full cursor-pointer outline-none shadow-md"
@@ -76,7 +76,7 @@ function UserProfile() {
               )}
             </div>
           </div>
-          <div className='text-center mb-7'>
+          <div className='text-center mb-7 mt-3'>
               <button
                 type="button"
                 onClick={(e)=>{

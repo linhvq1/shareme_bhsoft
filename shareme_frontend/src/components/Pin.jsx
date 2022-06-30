@@ -14,7 +14,7 @@ function Pin({pin:{postedBy, image, _id, destination, save}}) {
     const navigate = useNavigate()
     const user = fetchUser()
 
-    const alreadySaved = !!(save?.filter((item)=>item.postedBy._id === user.sub))?.length
+    const alreadySaved = !!(save?.filter((item)=>item.postedBy._id === user?.sub))?.length
 
     // neu nhu muon lay ra 1 trong [1,2,3] ->[1].length ->tuc la co so 1 va do dai tra ve la 1
     // -> !1 -> false -> !false -> true co nghia la da luu 
@@ -31,10 +31,10 @@ function Pin({pin:{postedBy, image, _id, destination, save}}) {
             .setIfMissing({save: []})
             .insert('after','save[-1]',[{
                 _key: uuidv4(),
-                userId: user.sub,
+                userId: user?.sub,
                 postedBy:{
                     _type: 'postedBy',
-                    _ref: user.sub,
+                    _ref: user?.sub,
                 },
             },])
             .commit()
@@ -42,6 +42,16 @@ function Pin({pin:{postedBy, image, _id, destination, save}}) {
                 window.location.reload()
             })
         }
+    }
+
+    const unSave = (id)=>{
+        const toRemove = [`save[userId=="${user?.sub}"]`]
+        client.patch(id)
+            .unset(toRemove)
+            .commit()
+            .then(()=>{
+                window.location.reload()
+            })
     }
 
     const deletePin = (id)=>{
@@ -80,7 +90,12 @@ function Pin({pin:{postedBy, image, _id, destination, save}}) {
                             </a>
                         </div>
                         {alreadySaved? (
-                            <button type='button' className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none">
+                            <button type='button' className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none"
+                                onClick={(e)=>{
+                                    e.stopPropagation();
+                                    unSave(_id)
+                                }}
+                            >
                                 {save?.length} Saved
                             </button>
                         ):(
@@ -106,7 +121,7 @@ function Pin({pin:{postedBy, image, _id, destination, save}}) {
                                 {destination.length > 15? `${destination.slice(0,15)}...`:destination.slice(8)}
                             </a>
                         )}
-                        {postedBy?._id === user.sub && (
+                        {postedBy?._id === user?.sub && (
                             <button
                                 type='button'
                                 onClick={(e) =>{
