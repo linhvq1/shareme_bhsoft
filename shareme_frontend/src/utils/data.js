@@ -50,6 +50,28 @@ export const categories = [
   },
 ];
 
+export const sortBy =[
+  {
+      name: 'A to Z',
+      fields: 'title',
+      isChecked: false
+  },
+  {
+      name: 'Most recently created',
+      fields: '_createdAt',
+      isChecked: true
+  },
+  {
+      name: 'Most view',
+      fields: 'views',
+      isChecked: false
+  },
+  {
+      name: 'Most download',
+      fields: 'downloads',
+      isChecked: false
+  },
+]
 
 export const userQuery = (userId)=>{
                 // lay ra user(document as *) voi bang la user va id cua user do phai match
