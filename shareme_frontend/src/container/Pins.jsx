@@ -17,6 +17,7 @@ function Pins(props) {
           <Route path='/' element={<Feed />}/>
           <Route path='/category/:categoryId' element={<Feed />}/>
           <Route path='/pin-detail/:pinId' element={<PinDetail user={props.user} />}/>
+          <Route path='/create-pin/:pinId' element={<CreatePin user={props.user}/>}/>
           <Route path='/create-pin' element={<CreatePin user={props.user}/>}/>
           <Route path='/search' element={<Search searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>}/>
           <Route path='*' 

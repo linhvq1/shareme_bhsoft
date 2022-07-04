@@ -2,17 +2,22 @@ import React, {useState, useEffect} from 'react'
 import {AiOutlineLogout} from 'react-icons/ai'
 import {useParams, useNavigate} from 'react-router-dom'
 
-import {userCreatedPinsQuery, userQuery, userSavedPinsQuery} from '../utils/data.js'
+import {sortBy, userCreatedPinsQuery, userQuery, userSavedPinsQuery} from '../utils/data.js'
 import { client } from '../client'
 import {fetchUser} from '../utils/fetchUser.js'
 
 import MasonryLayout from './MasonryLayout.jsx'
 import Spinner from './Spinner.jsx'
+import { IoMdSwitch } from 'react-icons/io'
+import FloatSortBy from './FloatSortBy.jsx'
 
 const randomImage = 'https://source.unsplash.com/1600x900/?nature,phography,technology'
 
 const activeBtnStyles = 'bg-red-500 text-white font-bold p-2 rounded-full w-20 outline-none'
 const notActiveBtnStyles = 'bg-primary mr-4 text-black font-bold p-2 rounded-full w-20 outline-none'
+
+const isActiveStyleFloatBtn = "flex justify-center items-center w-10 h-10 rounded-full bg-black text-white"
+const isNotActiveStyleFloatBtn = "flex justify-center items-center w-10 h-10 rounded-full hover:bg-gray-200"
 
 function UserProfile() {
 
@@ -22,7 +27,22 @@ function UserProfile() {
   const [activeBtn, setActiveBtn] = useState('created')
   const navigate = useNavigate()
   const {userId} = useParams()
+  const [reloadPin, setReloadPin] = useState(false);
   const [sortedBy, setSortedBy] = useState('_createdAt')
+  
+  const [isActive, setIsActive] = useState(false);
+  const [checkSortBy, setCheckSortBy] = useState([...sortBy])
+  
+  const handleSortBy = (s) => {
+    setCheckSortBy(prevCheck => prevCheck.map(sB =>{
+      if(sB.name === s){
+        setSortedBy(sB.fields)
+        return {...sB, isChecked: !sB.isChecked}
+      }
+      else 
+      {return {...sB, isChecked:false}}
+    }))
+  }
 
   useEffect(() => {
     const query = userQuery(userId)
@@ -38,8 +58,9 @@ function UserProfile() {
     client.fetch(query)
       .then((data)=>{
         setPins(data)
+        setReloadPin(false)
       })
-  }, [text, userId,sortedBy])
+  }, [text, userId,reloadPin,sortedBy])
   
   
   const logout = ()=>{
@@ -101,7 +122,27 @@ function UserProfile() {
           </div>
           {pins?.length ? (    
               <div className='px-2'>
-                <MasonryLayout pins={pins} setSortBy={setSortedBy}/>
+                
+                <div className={isActive ? isActiveStyleFloatBtn : isNotActiveStyleFloatBtn}
+                onClick={()=>setIsActive(!isActive)}
+                >
+                  <IoMdSwitch className="text-3xl"/>
+                  {isActive && (
+                    <div className="absolute flex flex-col shadow-xl shadow-gray-700 bg-white text-black mt-56 ml-56 z-50 p-3 rounded-lg"
+                      style={{width:'270px', height:'auto'}}
+                    >
+                      <p className="text-sm">Sort by</p>
+                      <div className="flex flex-col font-bold text-lg">
+                        {checkSortBy.map((items,i) => (
+                          <FloatSortBy key={i} name={items.name} isChecked={items.isChecked} handleSortBy={handleSortBy}/>
+                        ))
+                          }
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
+                <MasonryLayout pins={pins} setReload={(e)=>setReloadPin(e)}/>
               </div>
           ):(
             <div className='flex justify-center font-bold items-center w-full text-xl mt-2'>

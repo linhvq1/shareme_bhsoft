@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { client, urlFor } from "../client";
-import { MdDownloadForOffline } from "react-icons/md";
+import { MdDownloadForOffline, MdEdit } from "react-icons/md";
 import { AiTwotoneDelete } from "react-icons/ai";
 import { BsFillArrowUpRightCircleFill } from "react-icons/bs";
 import { fetchUser } from "../utils/fetchUser";
-import { feedQuery } from "../utils/data";
 
 // {postedBy, image, _id, destination, }
 function Pin({
@@ -18,6 +17,7 @@ function Pin({
   const [postHovered, setPostHovered] = useState(false);
   const navigate = useNavigate();
   const user = fetchUser();
+  const {userId} = useParams()
 
   const alreadySaved = !!save?.filter((item) => item.postedBy._id === user.sub)
     ?.length;
@@ -136,6 +136,15 @@ function Pin({
                   Save
                 </button>
               )}
+            </div>
+            <div className="flex items-center justify-end">
+               {userId && <Link
+                 to={`/create-pin/${_id}`}
+                 onClick={(e)=>{e.stopPropagation()}}
+                  className="bg-white flex items-center  text-black font-bold p-2  rounded-full opacity-70 hover:opacity-100 hover:shadow-md"
+                >
+                   <MdEdit />
+                </Link>}
             </div>
             <div className="flex justify-between items-center gap-2 w-full">
               {destination && (
