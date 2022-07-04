@@ -65,5 +65,11 @@ export default {
       type: "number",
       initialValue: 0,
     },
+    {
+      name: "publicPin",
+      title: "PublicPin",
+      type: "boolean",
+      initialValue: true,
+    },
   ],
 };
