@@ -19,6 +19,12 @@ function Pins(props) {
           <Route path='/pin-detail/:pinId' element={<PinDetail user={props.user} />}/>
           <Route path='/create-pin' element={<CreatePin user={props.user}/>}/>
           <Route path='/search' element={<Search searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>}/>
+          <Route path='*' 
+            element={
+            <main style={{ padding: "1rem" }}>
+              <p>There's nothing here!</p>
+            </main>}
+          />
         </Routes>
       </div>
     </div>
