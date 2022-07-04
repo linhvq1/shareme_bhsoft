@@ -54,7 +54,8 @@ function UserProfile() {
   }, [userId])
 
   useEffect(() => {
-    let query = text === "Created"? userCreatedPinsQuery(userId,sortedBy) :userSavedPinsQuery(userId,sortedBy)
+    let owner = userId === fetchUser()?.sub? true : false
+    let query = text === "Created"? userCreatedPinsQuery(userId,sortedBy, owner) :userSavedPinsQuery(userId,sortedBy,owner)
     client.fetch(query)
       .then((data)=>{
         setPins(data)
