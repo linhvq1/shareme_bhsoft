@@ -14,19 +14,20 @@ function Feed() {
   const [loading, setLoading] = useState(false);
   const { categoryId } = useParams();
   const [pins, setPins] = useState([]);
-  const query = categoryId ? searchQuery(categoryId) : feedQuery;
-  async function fetchData() {
-    const result = await client.fetch(query);
-
-    setPins(result);
-  }
+  const [reloadPin, setReloadPin] = useState(false);
+  const [sortedBy, setSortedBy] = useState('_createdAt')
+  // const query = categoryId ? searchQuery(categoryId) : feedQuery;
   useEffect(() => {
-    try {
-      fetchData();
-    } catch (e) {
-      console.log(e);
-    }
-  }, [categoryId, fetchData]);
+    if(!reloadPin) setLoading(true)
+    const query = categoryId? searchQuery(categoryId,sortedBy) : feedQuery(sortedBy)
+      client.fetch(query)
+      .then((data)=>{
+          setPins(data)
+          setLoading(false)
+          setReloadPin(false) // change
+      })
+
+  }, [categoryId, reloadPin,sortedBy])
 
   if (loading)
     return <Spinner message="We are adding new ideas to your feed!" />;
@@ -35,7 +36,7 @@ function Feed() {
     return <Spinner message="We are adding new ideas to your feed!" />;
 
   if (!pins?.length) return <h2>No pins available</h2>;
-  return <div>{pins && <MasonryLayout pins={pins} />}</div>;
+  return <div>{pins && <MasonryLayout pins={pins} setReload={setReloadPin} setSortBy={setSortedBy}/>}</div> //change
 }
 
 export default Feed;

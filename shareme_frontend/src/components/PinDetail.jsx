@@ -1,5 +1,6 @@
 import React,{useState, useEffect} from 'react'
 import {MdDownloadForOffline} from 'react-icons/md'
+import {GrDownload, GrView} from 'react-icons/gr'
 import {Link, useParams} from 'react-router-dom'
 import {v4 as uuidv4} from 'uuid'
 
@@ -15,6 +16,7 @@ function PinDetail({user}) {
   const [comment, setComment] = useState('')
   const [addingComment, setAddingComment] = useState(false)
   const {pinId} = useParams()
+  const [reloadPin, setReloadPin] = useState(false)
 
   const addComment = ()=>{
     if(comment){
@@ -58,7 +60,8 @@ function PinDetail({user}) {
 
   useEffect(() => {
     fetchPinDetails()
-  }, [pinId])
+    setReloadPin(false)
+  }, [pinId, reloadPin])
   
   if(!pinDetails) return <Spinner message="Loading pin..."/>
 
@@ -78,7 +81,15 @@ function PinDetail({user}) {
             <a
               href={`${pinDetails?.image?.asset?.url}?dl=`} 
               download
-              onClick={(e)=> e.stopPropagation()}  
+              onClick={(e)=> {
+                client
+                      .patch(pinId)
+                      .setIfMissing({ downloads: 0 })
+                      .inc({ downloads: 1 })
+                      .commit();
+                    e.stopPropagation();
+                    setReloadPin(true)
+              }}  
               className="bg-white w-9 h-9 flex justify-center items-center rounded-full text-dark text-xl opacity-75 hover:opacity-100 hover:shadow-md outline-none"
             >
               <MdDownloadForOffline/>
@@ -88,6 +99,16 @@ function PinDetail({user}) {
         </div>
         <div>
           <h1 className='text-4xl font-bold break-words mt-3'>{pinDetails.title}</h1>
+          <div className='flex gap-3 mt-2'>
+            <div className="flex justify-center items-center text-dark text-md ">
+              <GrView/>
+              <p className='ml-3'>{pinDetails.views}</p>
+            </div>
+            <div className="flex justify-center items-center text-dark text-md ">
+              <GrDownload/>
+              <p className='ml-3'>{pinDetails.downloads}</p>
+            </div>
+          </div>
           <p className='mt-3'>{pinDetails.about}</p>
         </div>
         <Link 

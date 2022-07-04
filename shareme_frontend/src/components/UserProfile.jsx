@@ -22,6 +22,7 @@ function UserProfile() {
   const [activeBtn, setActiveBtn] = useState('created')
   const navigate = useNavigate()
   const {userId} = useParams()
+  const [sortedBy, setSortedBy] = useState('_createdAt')
 
   useEffect(() => {
     const query = userQuery(userId)
@@ -33,12 +34,12 @@ function UserProfile() {
   }, [userId])
 
   useEffect(() => {
-    let query = text === "Created"? userCreatedPinsQuery(userId) :userSavedPinsQuery(userId)
+    let query = text === "Created"? userCreatedPinsQuery(userId,sortedBy) :userSavedPinsQuery(userId,sortedBy)
     client.fetch(query)
       .then((data)=>{
         setPins(data)
       })
-  }, [text, userId])
+  }, [text, userId,sortedBy])
   
   
   const logout = ()=>{
@@ -100,7 +101,7 @@ function UserProfile() {
           </div>
           {pins?.length ? (    
               <div className='px-2'>
-                <MasonryLayout pins={pins} />
+                <MasonryLayout pins={pins} setSortBy={setSortedBy}/>
               </div>
           ):(
             <div className='flex justify-center font-bold items-center w-full text-xl mt-2'>

@@ -13,6 +13,7 @@ function Pin({
   pin: { postedBy, image, _id, destination, save },
   index,
   handleViews,
+  setReload
 }) {
   const [postHovered, setPostHovered] = useState(false);
   const navigate = useNavigate();
@@ -44,7 +45,8 @@ function Pin({
         ])
         .commit()
         .then(() => {
-          //  window.location.reload();
+          //window.location.reload();
+          setReload(true) // change
         });
     }
   };
@@ -56,7 +58,8 @@ function Pin({
       .unset(toRemove)
       .commit()
       .then(() => {
-        //  window.location.reload();
+        //window.location.reload();
+         setReload(true) // change
       });
   };
 
@@ -103,6 +106,7 @@ function Pin({
                       .inc({ downloads: 1 })
                       .commit();
                     e.stopPropagation();
+                   
                   }}
                   className="bg-white w-9 h-9 flex justify-center items-center rounded-full text-dark text-xl opacity-75 hover:opacity-100 hover:shadow-md outline-none"
                 >
@@ -143,7 +147,7 @@ function Pin({
                 >
                   <BsFillArrowUpRightCircleFill />
                   {destination.length > 15
-                    ? `${destination.slice(0, 15)}...`
+                    ? `${destination.slice(8, 17)}...`
                     : destination.slice(8)}
                 </a>
               )}
