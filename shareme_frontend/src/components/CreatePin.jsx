@@ -67,6 +67,8 @@ function CreatePin({ user }) {
           _ref: user._id,
         },
         category,
+        views: 0,
+        downloads: 0,
       };
       client.create(doc).then(() => {
         navigate("/");
@@ -173,8 +175,9 @@ function CreatePin({ user }) {
                 <option value="other" className="bg-white">
                   Select Category
                 </option>
-                {categories.map((category) => (
+                {categories.map((category,i) => (
                   <option
+                    key={i}
                     value={category.name}
                     className="text-base border-0 outline-none capitalize bg-white text-black"
                   >
