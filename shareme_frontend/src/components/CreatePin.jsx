@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { client } from "../client";
 import Spinner from "./Spinner";
 
-import { categories } from "../utils/data";
+import { categories, getAssetPinDetailQuery, pinDetailQuery } from "../utils/data";
+import Switch from "./Switch";
 
 function CreatePin({ user }) {
+  const [pin, setPin] = useState(null)
+  const {pinId} = useParams()
+  const [assetPin, setAssetPin] = useState(null)
   const [title, setTitle] = useState("");
   const [about, setAbout] = useState("");
   const [destination, setDestination] = useState("");
@@ -16,6 +20,28 @@ function CreatePin({ user }) {
   const [category, setCategory] = useState(null);
   const [imageAsset, setImageAsset] = useState(null);
   const [wrongImageType, setWrongImageType] = useState(false);
+  const [publicPin, setPublicPin] = useState(true) 
+  
+  useEffect(() => {
+    if(pinId){
+      client.fetch(pinDetailQuery(pinId))
+      .then((data)=>{
+        setPin(data[0])
+        setTitle(data[0].title)
+        setAbout(data[0].about)
+        setDestination(data[0].destination)
+        setCategory(data[0].category)
+        setPublicPin(data[0].publicPin)
+        setImageAsset(data[0].image.asset)
+      })
+
+      client.fetch(getAssetPinDetailQuery(pinId))
+      .then(data => {
+        setAssetPin(data[0].image.asset)
+      })
+    }
+  }, [])
+
 
   const navigate = useNavigate();
 
@@ -69,6 +95,7 @@ function CreatePin({ user }) {
         category,
         views: 0,
         downloads: 0,
+        publicPin: publicPin? publicPin: false,
       };
       client.create(doc).then(() => {
         navigate("/");
@@ -79,6 +106,45 @@ function CreatePin({ user }) {
     }
   };
 
+
+  const updatePin = ()=>{
+    if (title && about && destination && category) {
+      const doc = {
+        _type: "pin",
+        title, // neu key va value giong nhau thi chi can viet 1 cai thoi
+        about,
+        destination,
+        image: {
+          _type: "image",
+          asset: {
+            _type: "reference",
+            _ref: assetPin?._ref,
+          },
+        },
+        userId: user._id,
+        postedBy: {
+          _type: "postedBy",
+          _ref: user._id,
+        },
+        category,
+        views: pin?.views,
+        downloads: pin?.downloads,
+        publicPin: publicPin,
+      };
+      console.log(doc)
+      client.patch(pinId).set(doc).commit().then(() => {
+          navigate("/");
+        });
+      // client.createOrReplace(doc).then(() => {
+      //   navigate("/");
+      // });
+    } else {
+      setFields(true);
+      setTimeout(() => setFields(false), 2000);
+    }
+  }
+
+  
   return (
     <div className="flex flex-col justify-center items-center mt-5 lg:h-4/5">
       {fields && (
@@ -171,6 +237,7 @@ function CreatePin({ user }) {
               <select
                 onChange={(e) => setCategory(e.target.value)}
                 className="outline-none w-4/5 text-base border-b-2 border-grat-200 rounded-md cursor-pointer"
+                value={category? category:""}
               >
                 <option value="other" className="bg-white">
                   Select Category
@@ -186,13 +253,17 @@ function CreatePin({ user }) {
                 ))}
               </select>
             </div>
+            <div className="flex gap-x-4 mt-6 items-center">
+              <p className="font-semibold text-lg sm:text-lg">Public for everyone?</p>
+             <Switch publicPin={publicPin} setPublicPin={setPublicPin}/>
+            </div>
             <div className="flex justify-end items-end mt-5">
               <button
                 type="button"
-                onClick={savePin}
+                onClick={pinId?updatePin: savePin}
                 className="bg-red-500 text-white font-bold p-2 rounded-full w-28 outline-none"
               >
-                Save Pin
+                {pinId?'Update Pin': 'Save Pin'}
               </button>
             </div>
           </div>

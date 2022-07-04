@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { client, urlFor } from "../client";
-import { MdDownloadForOffline, MdEdit } from "react-icons/md";
+import { MdDownloadForOffline, MdEdit, MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { AiTwotoneDelete } from "react-icons/ai";
 import { BsFillArrowUpRightCircleFill } from "react-icons/bs";
 import { fetchUser } from "../utils/fetchUser";
 
 // {postedBy, image, _id, destination, }
 function Pin({
-  pin: { postedBy, image, _id, destination, save },
+  pin: { postedBy, image, _id, destination, save, publicPin },
   index,
   handleViews,
   setReload
@@ -137,15 +137,22 @@ function Pin({
                 </button>
               )}
             </div>
-            <div className="flex items-center justify-end">
-               {userId && <Link
-                 to={`/create-pin/${_id}`}
-                 onClick={(e)=>{e.stopPropagation()}}
-                  className="bg-white flex items-center  text-black font-bold p-2  rounded-full opacity-70 hover:opacity-100 hover:shadow-md"
+            {userId && userId === user?.sub && postedBy?._id === user.sub && (
+            <div className="flex items-center justify-between">
+
+                <div className="bg-white flex items-center text-black font-bold p-2 rounded-full opacity-70 hover:opacity-100 hover:shadow-md">
+                  {publicPin? <MdVisibility /> : <MdVisibilityOff/>}
+                </div>
+                <Link
+                to={`/create-pin/${_id}`}
+                onClick={(e)=>{e.stopPropagation()}}
+                className="bg-white flex items-center text-black font-bold p-2 rounded-full opacity-70 hover:opacity-100 hover:shadow-md"
                 >
-                   <MdEdit />
-                </Link>}
+                  <MdEdit />
+                  
+                </Link>
             </div>
+               )}
             <div className="flex justify-between items-center gap-2 w-full">
               {destination && (
                 <a
