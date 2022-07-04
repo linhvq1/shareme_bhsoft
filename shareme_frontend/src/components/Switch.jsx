@@ -1,5 +1,4 @@
-function Switch({publicPin, setPublicPin}) {
-  
+function Switch({ publicPin, setPublicPin }) {
   const toggleClass = " transform translate-x-5";
   return (
     <>
@@ -7,16 +6,20 @@ function Switch({publicPin, setPublicPin}) {
         {/*   Switch Container */}
 
         <div
-          className={`md:w-14 md:h-7 w-10 h-6 flex items-center ${!publicPin ? 'bg-white border-solid border border-black' : 'bg-black'} rounded-full p-1 cursor-pointer`}
+          className={`md:w-14 md:h-7 w-10 h-6 flex items-center ${
+            !publicPin
+              ? "bg-white border-solid border border-black"
+              : "bg-black"
+          } rounded-full p-1 cursor-pointer`}
           onClick={() => {
-            setPublicPin(!publicPin)
+            setPublicPin(!publicPin);
           }}
         >
           {/* Switch */}
           <div
             className={
               "bg-white md:w-6 md:h-6 h-5 w-5 rounded-full shadow-md transform duration-300 ease-in-out" +
-              (!publicPin ? 'border-solid border border-black' : toggleClass)
+              (!publicPin ? "border-solid border border-black" : toggleClass)
             }
           ></div>
         </div>

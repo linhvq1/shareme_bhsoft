@@ -12,12 +12,23 @@ const breakpointObj = {
   500: 1,
 };
 
-function MasonryLayout({ pins, setReload}) {
+function MasonryLayout({ pins, setReload }) {
   return (
     <div>
-      <Masonry className="relative flex animate-slide-fwd" breakpointCols={breakpointObj}>
+      <Masonry
+        className="relative flex animate-slide-fwd"
+        breakpointCols={breakpointObj}
+      >
         {pins?.map((pin, index) => {
-          return <Pin key={pin._id} pin={pin} className="w-max" index={index} setReload={setReload}/> // change
+          return (
+            <Pin
+              key={pin._id}
+              pin={pin}
+              className="w-max"
+              index={index}
+              setReload={setReload}
+            />
+          );
         })}
       </Masonry>
     </div>

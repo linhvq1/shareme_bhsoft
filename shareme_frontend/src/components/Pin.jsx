@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { client, urlFor } from "../client";
-import { MdDownloadForOffline, MdEdit, MdVisibility, MdVisibilityOff } from "react-icons/md";
+import {
+  MdDownloadForOffline,
+  MdEdit,
+  MdVisibility,
+  MdVisibilityOff,
+} from "react-icons/md";
 import { AiTwotoneDelete } from "react-icons/ai";
 import { BsFillArrowUpRightCircleFill } from "react-icons/bs";
 import { fetchUser } from "../utils/fetchUser";
@@ -12,12 +17,12 @@ function Pin({
   pin: { postedBy, image, _id, destination, save, publicPin },
   index,
   handleViews,
-  setReload
+  setReload,
 }) {
   const [postHovered, setPostHovered] = useState(false);
   const navigate = useNavigate();
   const user = fetchUser();
-  const {userId} = useParams()
+  const { userId } = useParams();
 
   const alreadySaved = !!save?.filter((item) => item.postedBy._id === user.sub)
     ?.length;
@@ -46,7 +51,7 @@ function Pin({
         .commit()
         .then(() => {
           //window.location.reload();
-          setReload(true) // change
+          setReload(true); // change
         });
     }
   };
@@ -59,7 +64,7 @@ function Pin({
       .commit()
       .then(() => {
         //window.location.reload();
-         setReload(true) // change
+        setReload(true); // change
       });
   };
 
@@ -106,7 +111,6 @@ function Pin({
                       .inc({ downloads: 1 })
                       .commit();
                     e.stopPropagation();
-                   
                   }}
                   className="bg-white w-9 h-9 flex justify-center items-center rounded-full text-dark text-xl opacity-75 hover:opacity-100 hover:shadow-md outline-none"
                 >
@@ -138,21 +142,21 @@ function Pin({
               )}
             </div>
             {userId && userId === user?.sub && postedBy?._id === user.sub && (
-            <div className="flex items-center justify-between">
-
+              <div className="flex items-center justify-between">
                 <div className="bg-white flex items-center text-black font-bold p-2 rounded-full opacity-70 hover:opacity-100 hover:shadow-md">
-                  {publicPin? <MdVisibility /> : <MdVisibilityOff/>}
+                  {publicPin ? <MdVisibility /> : <MdVisibilityOff />}
                 </div>
                 <Link
-                to={`/create-pin/${_id}`}
-                onClick={(e)=>{e.stopPropagation()}}
-                className="bg-white flex items-center text-black font-bold p-2 rounded-full opacity-70 hover:opacity-100 hover:shadow-md"
+                  to={`/create-pin/${_id}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  className="bg-white flex items-center text-black font-bold p-2 rounded-full opacity-70 hover:opacity-100 hover:shadow-md"
                 >
                   <MdEdit />
-                  
                 </Link>
-            </div>
-               )}
+              </div>
+            )}
             <div className="flex justify-between items-center gap-2 w-full">
               {destination && (
                 <a
